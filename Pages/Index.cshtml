@@ -1,0 +1,38 @@
+﻿@page
+@model ImageAnalysisApp.Pages.UploadModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form enctype="multipart/form-data" method="post">
+    <label for="imageFile" class="form-label">Upload an image:</label>
+    <div class="input-group mb-3">
+        <input type="file" class="form-control" name="imageFile" id="imageFile" class="form-control" />
+        <button type="submit" class="btn btn-primary">Analyze Image</button>
+    </div>
+</form>
+
+@if (Model.ThumbnailImage != null && Model.Tags != null && Model.Caption != null)
+{
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="data:image/png;base64,@Model.ThumbnailImage" class="img-fluid rounded-start" style="height: 100%;" alt="Analyzed Image with Bounding Boxes" />
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title">@Model.Caption</h3>
+
+                    <ul class="card-text">
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <li>@tag</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
