@@ -75,7 +75,7 @@ namespace ImageAnalysisApp.Pages
                                 var fillPaint = new SKPaint
                                 {
                                     Style = SKPaintStyle.Fill,
-                                    Color = new SKColor(255, 0, 0, 70) // Red color with transparency (alpha = 100)
+                                    Color = new SKColor(255, 0, 0, 70)
                                 };
 
                                 // Stroke paint for the border
@@ -86,10 +86,7 @@ namespace ImageAnalysisApp.Pages
                                     StrokeWidth = 2
                                 };
 
-                                // Draw filled rectangle
                                 canvas.DrawRect(rect.X, rect.Y, rect.Width, rect.Height, fillPaint);
-
-                                // Draw rectangle border
                                 canvas.DrawRect(rect.X, rect.Y, rect.Width, rect.Height, strokePaint);
                             }
                         }
