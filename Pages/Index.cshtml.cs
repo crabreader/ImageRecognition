@@ -39,21 +39,17 @@ namespace ImageAnalysisApp.Pages
 
             Env.Load();
 
-            // Get environment variables
             string endpoint = Environment.GetEnvironmentVariable("VISION_ENDPOINT");
             string key = Environment.GetEnvironmentVariable("VISION_KEY");
 
-            // Create the Image Analysis client
             var client = new ImageAnalysisClient(
                 new Uri(endpoint),
                 new AzureKeyCredential(key));
 
-            // Analyze the image
             ImageAnalysisResult analysisResult = await client.AnalyzeAsync(
                 new BinaryData(imageData),                
                 VisualFeatures.Caption | VisualFeatures.Read | VisualFeatures.Tags | VisualFeatures.Objects);
 
-            // Get the tags from the analysis result
             Tags = new List<string>();
             foreach (var tag in analysisResult.Tags.Values)
             {
@@ -67,9 +63,6 @@ namespace ImageAnalysisApp.Pages
             {
                 using (var originalImage = SKBitmap.Decode(inputStream))
                 {
-                    // const int thumbnailSize = 500;
-                    // var thumbnail = originalImage.Resize(new SKImageInfo(thumbnailSize, thumbnailSize), SKFilterQuality.High);
-
                     using (var canvas = new SKCanvas(originalImage))
                     {
                         if (analysisResult.Objects != null)
@@ -77,17 +70,6 @@ namespace ImageAnalysisApp.Pages
                             foreach (var detectedObject in analysisResult.Objects.Values)
                             {
                                 var rect = detectedObject.BoundingBox;
-
-                                // // Calculate bounding box coordinates for thumbnail
-                                // var left = rect.X * thumbnail.Width / originalImage.Width;
-                                // var top = rect.Y * thumbnail.Height / originalImage.Height;
-                                // var width = rect.Width * thumbnail.Width / originalImage.Width;
-                                // var height = rect.Height * thumbnail.Height / originalImage.Height;
-
-                                var left = rect.X;
-                                var top = rect.Y;
-                                var width = rect.Width;
-                                var height = rect.Height;
 
                                 // Fill paint with transparency
                                 var fillPaint = new SKPaint
@@ -105,10 +87,10 @@ namespace ImageAnalysisApp.Pages
                                 };
 
                                 // Draw filled rectangle
-                                canvas.DrawRect(left, top, width, height, fillPaint);
+                                canvas.DrawRect(rect.X, rect.Y, rect.Width, rect.Height, fillPaint);
 
                                 // Draw rectangle border
-                                canvas.DrawRect(left, top, width, height, strokePaint);
+                                canvas.DrawRect(rect.X, rect.Y, rect.Width, rect.Height, strokePaint);
                             }
                         }
 
